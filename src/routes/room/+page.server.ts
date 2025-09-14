@@ -7,6 +7,7 @@ export async function load(event) {
 	let user = event.locals.user;
 	console.log(user, 'cxvxcxcvcxxc');
 	if (!user) {
+		console.log('NO USERRRR', user);
 		throw redirect(302, '/auth');
 	}
 
@@ -17,6 +18,7 @@ export async function load(event) {
 			.where(eq(userProfile.studentEmail, user.email));
 
 		if (!profile) {
+			console.log('NO PROFILE');
 			throw redirect(302, '/auth');
 		}
 
@@ -25,7 +27,7 @@ export async function load(event) {
 			.from(chatroom)
 			.where(and(eq(chatroom.dorm, profile[0].dorm), eq(chatroom.block, profile[0].block)));
 		let prevChats;
-		if (room) {
+		if (room.length) {
 			prevChats = await db.query.message.findMany({
 				where: eq(message.roomId, room[0].id),
 				with: {
@@ -40,6 +42,7 @@ export async function load(event) {
 			room: room[0]
 		};
 	} catch (error) {
+		console.log(error);
 		throw redirect(302, '/auth');
 	}
 }

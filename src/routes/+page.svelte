@@ -1,6 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
 	import Button from '@/components/ui/button/button.svelte';
+	import { MessageSquareShare } from '@lucide/svelte';
 
 	function handleAuth() {
 		goto('/auth');
@@ -29,4 +30,7 @@
 	>
 		Get Started →
 	</Button>
+	<a href="/room" class=" mt-3 flex items-center gap-2 text-orange-500"
+		>Room <MessageSquareShare size={20} />
+	</a>
 </div>

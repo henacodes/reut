@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import { authClient } from '@/auth-client.js';
 	import Button from '@/components/ui/button/button.svelte';
 	import Card from '@/components/ui/card/card.svelte';
 	import Input from '@/components/ui/input/input.svelte';
@@ -70,6 +72,14 @@
 		<h1 class="text-lg font-semibold">
 			Block {data.profile.block}, Dorm {data.profile.dorm} Chatroom
 		</h1>
+
+		<Button
+			onclick={async () => {
+				await authClient.signOut();
+
+				goto('/auth');
+			}}>Sign Out</Button
+		>
 	</header>
 
 	<!-- Messages -->
