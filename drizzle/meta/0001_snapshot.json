@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "8e931baf-cd1b-4d40-80a8-194c71c66430",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "8fbc5f71-72b6-432b-b15e-4fc2e47f0bf3",
+  "prevId": "8e931baf-cd1b-4d40-80a8-194c71c66430",
   "tables": {
     "account": {
       "name": "account",
@@ -475,8 +475,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "user_id": {
-          "name": "user_id",
+        "student_email": {
+          "name": "student_email",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -485,15 +485,15 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "user_profiles_user_id_user_id_fk": {
-          "name": "user_profiles_user_id_user_id_fk",
+        "user_profiles_student_email_user_email_fk": {
+          "name": "user_profiles_student_email_user_email_fk",
           "tableFrom": "user_profiles",
           "tableTo": "user",
           "columnsFrom": [
-            "user_id"
+            "student_email"
           ],
           "columnsTo": [
-            "id"
+            "email"
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
@@ -509,7 +509,9 @@
   "_meta": {
     "schemas": {},
     "tables": {},
-    "columns": {}
+    "columns": {
+      "\"user_profiles\".\"user_id\"": "\"user_profiles\".\"student_email\""
+    }
   },
   "internal": {
     "indexes": {}

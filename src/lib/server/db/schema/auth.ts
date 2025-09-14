@@ -64,13 +64,3 @@ export const verification = sqliteTable('verification', {
 		.$onUpdate(() => /* @__PURE__ */ new Date())
 		.notNull()
 });
-
-export const otpRequest = sqliteTable('otp_request', {
-	id: integer('id').primaryKey(), // auto-increment ID
-	studentId: text('student_id').notNull(), // foreign key to student_records
-	code: text('code').notNull(), // OTP code
-	consumed: integer({ mode: 'boolean' }),
-	timestamp: text('timestamp')
-		.notNull()
-		.default(sql`(current_timestamp)`) // creation time
-});

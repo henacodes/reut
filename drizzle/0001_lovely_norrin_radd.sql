@@ -1,0 +1,2 @@
+ALTER TABLE `user_profiles` RENAME COLUMN "user_id" TO "student_email";--> statement-breakpoint
+ALTER TABLE `user_profiles` ALTER COLUMN "student_email" TO "student_email" text NOT NULL REFERENCES user(email) ON DELETE cascade ON UPDATE no action;

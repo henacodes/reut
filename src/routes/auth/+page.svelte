@@ -8,11 +8,16 @@
 	import * as Alert from '$lib/components/ui/alert/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { authClient } from '@/auth-client';
+	import { LoaderCircle } from '@lucide/svelte';
+	import { string } from 'zod';
 
 	let studentId = $state('ETS0727/17');
 	let departmentId = $state<DepartmentIdType | undefined>('Software');
 	let student = $state<ReturnType<typeof getStudent> | null>(null);
 	let error: { title: string; content: string } | null = $state(null);
+	let loading = $state(false);
+
+	let magicLinkSent = $state(false);
 
 	function handleSubmit() {
 		error = null;
@@ -41,16 +46,42 @@
 		}
 
 		console.log(student.email);
-		const { data, error } = await authClient.signIn.magicLink({
-			email: student.email,
-			name: `${student['First Name']} ${student['Father Name']}`,
-			callbackURL: '/welcome',
-			newUserCallbackURL: '/room',
-			errorCallbackURL: '/error'
-		});
+		loading = true;
+		const { data, error: err } = await authClient.signIn
+			.magicLink({
+				email: student.email,
+				name: `${student['First Name']} ${student['Father Name']}`,
+				callbackURL: '/welcome',
+				newUserCallbackURL: '/room',
+				errorCallbackURL: '/error'
+			})
+			.finally(async () => {
+				loading = false;
+				const res = await fetch('/api/profile', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+						department: departmentId,
+						studentId: studentId,
+						block: student!.Block,
+						dorm: student!.Dorm,
+						studentEmail: student!.email
+					})
+				});
 
-		console.log(data);
-		console.log(error);
+				console.log('user profile', res);
+			});
+
+		if (err != null) {
+			error = {
+				title: 'Sending email failed',
+				content: err.message || ''
+			};
+
+			return;
+		}
+
+		magicLinkSent = true;
 	}
 </script>
 
@@ -83,7 +114,7 @@
 			</Alert.Root>
 		{/if}
 
-		{#if student}
+		{#if student && !magicLinkSent}
 			<Card.Root class="max-w-md rounded-2xl bg-white p-4 shadow">
 				<Card.Header>
 					<Card.Title>
@@ -106,10 +137,28 @@
 				</Card.Content>
 
 				<Card.Footer class="flex flex-col items-start  justify-start ">
-					<Button onclick={handleSignIn}>Sign In with School Email</Button>
+					<Button disabled={loading} onclick={handleSignIn}
+						>Sign In with School Email
+						{#if loading}
+							<LoaderCircle class="animate-spin" />
+						{/if}
+					</Button>
 					<small class=" my-3">A sign-in link will be sent to your university mail box. </small>
 				</Card.Footer>
 			</Card.Root>
+		{:else if magicLinkSent}
+			<Alert.Root>
+				<Alert.Title>Link Sent</Alert.Title>
+				<Alert.Description>
+					<p>
+						Your sign-in link has been send to your university email box. Click on the link and you
+						will be signed in shorty after
+					</p>
+					<p>
+						FYI, your email address is {`${student!['First Name'].toLowerCase()}.${student!['Father Name'].toLowerCase()}@aastustudent.edu.et`}
+					</p>
+				</Alert.Description>
+			</Alert.Root>
 		{/if}
 	</form>
 </div>

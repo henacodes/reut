@@ -47,3 +47,29 @@ CREATE TABLE `verification` (
 	`created_at` integer DEFAULT (cast((julianday('now') - 2440587.5)*86400000 as integer)) NOT NULL,
 	`updated_at` integer DEFAULT (cast((julianday('now') - 2440587.5)*86400000 as integer)) NOT NULL
 );
+--> statement-breakpoint
+CREATE TABLE `chatroom` (
+	`id` text PRIMARY KEY NOT NULL,
+	`block` text NOT NULL,
+	`dorm` text NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE `message` (
+	`id` integer PRIMARY KEY NOT NULL,
+	`room_id` text NOT NULL,
+	`user_id` text NOT NULL,
+	`content` text NOT NULL,
+	`createdAt` text DEFAULT (current_timestamp),
+	FOREIGN KEY (`room_id`) REFERENCES `chatroom`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE TABLE `user_profiles` (
+	`id` text PRIMARY KEY NOT NULL,
+	`department` text NOT NULL,
+	`student_id` text NOT NULL,
+	`block` text NOT NULL,
+	`dorm` text NOT NULL,
+	`user_id` text NOT NULL,
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
+);

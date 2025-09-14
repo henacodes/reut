@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX `user_profiles_student_email_unique` ON `user_profiles` (`student_email`);

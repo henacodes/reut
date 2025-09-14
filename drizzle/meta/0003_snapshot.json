@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "8e931baf-cd1b-4d40-80a8-194c71c66430",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "a9f86f1d-bac5-4748-870c-b6cb97a91643",
+  "prevId": "2a4f239d-9341-4bf2-a0b3-afdf708d9613",
   "tables": {
     "account": {
       "name": "account",
@@ -475,30 +475,24 @@
           "notNull": true,
           "autoincrement": false
         },
-        "user_id": {
-          "name": "user_id",
+        "student_email": {
+          "name": "student_email",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         }
       },
-      "indexes": {},
-      "foreignKeys": {
-        "user_profiles_user_id_user_id_fk": {
-          "name": "user_profiles_user_id_user_id_fk",
-          "tableFrom": "user_profiles",
-          "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
+      "indexes": {
+        "user_profiles_student_email_unique": {
+          "name": "user_profiles_student_email_unique",
+          "columns": [
+            "student_email"
           ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "isUnique": true
         }
       },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
