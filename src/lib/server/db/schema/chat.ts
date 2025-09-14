@@ -1,5 +1,5 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
-import { sql } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 import { user } from './auth';
 
 export const chatroom = sqliteTable('chatroom', {
@@ -19,3 +19,19 @@ export const message = sqliteTable('message', {
 	content: text('content').notNull(),
 	createdAt: text().default(sql`(current_timestamp)`)
 });
+
+export const messageRelations = relations(message, ({ one }) => ({
+	user: one(user, {
+		fields: [message.userId],
+		references: [user.id]
+	}),
+	room: one(chatroom, {
+		fields: [message.roomId],
+		references: [chatroom.id]
+	})
+}));
+
+// chatroom → messages
+export const chatroomRelations = relations(chatroom, ({ many }) => ({
+	messages: many(message)
+}));

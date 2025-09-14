@@ -51,7 +51,7 @@
 			.magicLink({
 				email: student.email,
 				name: `${student['First Name']} ${student['Father Name']}`,
-				callbackURL: '/welcome',
+				callbackURL: '/room',
 				newUserCallbackURL: '/room',
 				errorCallbackURL: '/error'
 			})
