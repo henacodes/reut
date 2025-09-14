@@ -11,8 +11,8 @@
 	import { LoaderCircle } from '@lucide/svelte';
 	import { string } from 'zod';
 
-	let studentId = $state('ETS0727/17');
-	let departmentId = $state<DepartmentIdType | undefined>('Software');
+	let studentId = $state('');
+	let departmentId = $state<DepartmentIdType | undefined>();
 	let student = $state<ReturnType<typeof getStudent> | null>(null);
 	let error: { title: string; content: string } | null = $state(null);
 	let loading = $state(false);
@@ -85,80 +85,83 @@
 	}
 </script>
 
-<div class=" flex justify-center pt-32">
-	<form class=" flex w-[20rem] flex-col justify-center gap-4">
-		<Input placeholder="Enter your Student Id" bind:value={studentId} />
-		<Select.Root
-			type="single"
-			value={departmentId}
-			onValueChange={(v) => (departmentId = v as DepartmentIdType)}
-		>
-			<Select.Trigger class=""
-				>{(departmentId && DEPARTMENTS[departmentId]) || 'Choose your department'}</Select.Trigger
+<div class=" pt-12">
+	<p class=" my-3 text-center">Join with AASTU Email</p>
+	<div class=" flex justify-center">
+		<form class=" flex w-[20rem] flex-col justify-center gap-4">
+			<Input placeholder="Enter your Student Id (ETSXXXX/XX) " bind:value={studentId} />
+			<Select.Root
+				type="single"
+				value={departmentId}
+				onValueChange={(v) => (departmentId = v as DepartmentIdType)}
 			>
-			<Select.Content>
-				{#each Object.keys(DEPARTMENTS) as depId}
-					<Select.Item value={depId}>{DEPARTMENTS[depId as DepartmentIdType]}</Select.Item>
-				{/each}
-			</Select.Content>
-		</Select.Root>
+				<Select.Trigger class=""
+					>{(departmentId && DEPARTMENTS[departmentId]) || 'Choose your department'}</Select.Trigger
+				>
+				<Select.Content>
+					{#each Object.keys(DEPARTMENTS) as depId}
+						<Select.Item value={depId}>{DEPARTMENTS[depId as DepartmentIdType]}</Select.Item>
+					{/each}
+				</Select.Content>
+			</Select.Root>
 
-		<Button onclick={handleSubmit}>Submit</Button>
+			<Button onclick={handleSubmit}>Submit</Button>
 
-		{#if error}
-			<Alert.Root variant="destructive">
-				<Alert.Title>{error.title}</Alert.Title>
-				<Alert.Description class="text-destructive">
-					<p>{error.content}</p>
-				</Alert.Description>
-			</Alert.Root>
-		{/if}
+			{#if error}
+				<Alert.Root variant="destructive">
+					<Alert.Title>{error.title}</Alert.Title>
+					<Alert.Description class="text-destructive">
+						<p>{error.content}</p>
+					</Alert.Description>
+				</Alert.Root>
+			{/if}
 
-		{#if student && !magicLinkSent}
-			<Card.Root class="max-w-md rounded-2xl bg-white p-4 shadow">
-				<Card.Header>
-					<Card.Title>
-						{student['First Name']}
-						{student['Father Name']}
-						{student['GFather Name']}
-					</Card.Title>
-					<Card.Description>{student['Dept.Stream']}</Card.Description>
-				</Card.Header>
+			{#if student && !magicLinkSent}
+				<Card.Root class="max-w-md rounded-2xl bg-white p-4 shadow">
+					<Card.Header>
+						<Card.Title>
+							{student['First Name']}
+							{student['Father Name']}
+							{student['GFather Name']}
+						</Card.Title>
+						<Card.Description>{student['Dept.Stream']}</Card.Description>
+					</Card.Header>
 
-				<Card.Content>
-					<p>
-						<strong>Block:</strong>
-						{student.Block}
-					</p>
-					<p>
-						<strong>Dorm Room:</strong>
-						{student.Dorm}
-					</p>
-				</Card.Content>
+					<Card.Content>
+						<p>
+							<strong>Block:</strong>
+							{student.Block}
+						</p>
+						<p>
+							<strong>Dorm Room:</strong>
+							{student.Dorm}
+						</p>
+					</Card.Content>
 
-				<Card.Footer class="flex flex-col items-start  justify-start ">
-					<Button disabled={loading} onclick={handleSignIn}
-						>Sign In with School Email
-						{#if loading}
-							<LoaderCircle class="animate-spin" />
-						{/if}
-					</Button>
-					<small class=" my-3">A sign-in link will be sent to your university mail box. </small>
-				</Card.Footer>
-			</Card.Root>
-		{:else if magicLinkSent}
-			<Alert.Root>
-				<Alert.Title>Link Sent</Alert.Title>
-				<Alert.Description>
-					<p>
-						Your sign-in link has been send to your university email box. Click on the link and you
-						will be signed in shorty after
-					</p>
-					<p>
-						FYI, your email address is {`${student!['First Name'].toLowerCase()}.${student!['Father Name'].toLowerCase()}@aastustudent.edu.et`}
-					</p>
-				</Alert.Description>
-			</Alert.Root>
-		{/if}
-	</form>
+					<Card.Footer class="flex flex-col items-start  justify-start ">
+						<Button disabled={loading} onclick={handleSignIn}
+							>Sign In with School Email
+							{#if loading}
+								<LoaderCircle class="animate-spin" />
+							{/if}
+						</Button>
+						<small class=" my-3">A sign-in link will be sent to your university mail box. </small>
+					</Card.Footer>
+				</Card.Root>
+			{:else if magicLinkSent}
+				<Alert.Root>
+					<Alert.Title>Link Sent</Alert.Title>
+					<Alert.Description>
+						<p>
+							Your sign-in link has been send to your university email box. Check your email and
+							click on the link and you will register automatically shorty after.
+						</p>
+						<p>
+							FYI, your email address is {`${student!['First Name'].toLowerCase()}.${student!['Father Name'].toLowerCase()}@aastustudent.edu.et`}
+						</p>
+					</Alert.Description>
+				</Alert.Root>
+			{/if}
+		</form>
+	</div>
 </div>
