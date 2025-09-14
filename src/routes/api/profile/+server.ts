@@ -5,6 +5,8 @@ import { userProfile } from '$lib/server/db/schema';
 import * as z from 'zod';
 import { randomUUID } from 'crypto';
 import { eq } from 'drizzle-orm';
+import { validateStudentProfile } from '$lib/server/validations';
+import type { DepartmentIdType } from '@/types';
 
 const userProfileSchema = z.object({
 	department: z.string(),
@@ -18,6 +20,25 @@ export const POST: RequestHandler = async ({ request }) => {
 	try {
 		const data = await request.json();
 		const parsed = userProfileSchema.parse(data);
+
+		let legit = validateStudentProfile({
+			...parsed,
+			department: parsed.department as DepartmentIdType
+		});
+
+		console.log('LEGITIMACY', legit);
+
+		if (!legit) {
+			return new Response(
+				JSON.stringify({
+					success: false,
+					error: 'You are trying to join a wrong chatroom or your email isnt right '
+				}),
+				{
+					status: 400
+				}
+			);
+		}
 
 		// Check if user with same email already exists
 		const existing = await db

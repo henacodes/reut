@@ -11,6 +11,10 @@ export const auth = betterAuth({
 	plugins: [
 		magicLink({
 			async sendMagicLink(data, request) {
+				const emailRegex = /^[a-z]+\.[a-z]+@aastustudent\.edu\.et$/i;
+				if (!emailRegex.test(data.email)) {
+					return;
+				}
 				await sendEmail({
 					from: 'reut@kirakos.dev',
 					to: [data.email],
