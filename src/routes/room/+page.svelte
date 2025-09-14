@@ -93,14 +93,6 @@
 				>
 				<span class="my-1 text-xs text-gray-400">{msg.createdAt}</span>
 			</div>
-			<div class="flex flex-col">
-				<span class="text-sm font-semibold text-gray-700">{msg.user.name}</span>
-				<span
-					class="flex flex-col rounded-base border-2 border-border bg-background p-3 font-base text-foreground shadow-shadow"
-					>{msg.content}</span
-				>
-				<span class="my-1 text-xs text-gray-400">{msg.createdAt}</span>
-			</div>
 		{/each}
 	</main>
 
