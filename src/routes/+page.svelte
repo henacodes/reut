@@ -3,8 +3,8 @@
 	import Button from '@/components/ui/button/button.svelte';
 	import { MessageSquareShare } from '@lucide/svelte';
 
-	function handleAuth() {
-		goto('/auth');
+	function tooRoom() {
+		goto('/room');
 	}
 </script>
 
@@ -25,12 +25,9 @@
 
 	<!-- Call-to-Action Button -->
 	<Button
-		onclick={handleAuth}
+		onclick={tooRoom}
 		class="border-4 border-black bg-green-300 px-8 py-4 text-2xl font-bold shadow-[6px_6px_0_0_black] transition-transform hover:translate-x-1 hover:translate-y-1 hover:shadow-none"
 	>
 		Get Started →
 	</Button>
-	<a href="/room" class=" mt-3 flex items-center gap-2 text-orange-500"
-		>Room <MessageSquareShare size={20} />
-	</a>
 </div>

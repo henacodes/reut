@@ -29,6 +29,7 @@ export async function sendEmail(props: SendEmailProps) {
 
 	if (!res.ok) {
 		const errorData = await res.json();
+		console.log('error data', errorData);
 		throw new Error(`Failed to send email: ${JSON.stringify(errorData)}`);
 	}
 

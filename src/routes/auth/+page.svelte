@@ -9,7 +9,6 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { authClient } from '@/auth-client';
 	import { LoaderCircle } from '@lucide/svelte';
-	import { string } from 'zod';
 
 	let studentId = $state('');
 	let departmentId = $state<DepartmentIdType | undefined>();
@@ -78,8 +77,11 @@
 				content: err.message || ''
 			};
 
+			console.log('EMAIL FAILURE', err);
 			return;
 		}
+
+		console.log('DATEEEEEEEEEEAAA', data);
 
 		magicLinkSent = true;
 	}
@@ -116,7 +118,7 @@
 				</Alert.Root>
 			{/if}
 
-			{#if student && !magicLinkSent}
+			{#if student && !magicLinkSent && error == null}
 				<Card.Root class="max-w-md rounded-2xl bg-white p-4 shadow">
 					<Card.Header>
 						<Card.Title>
